@@ -2,31 +2,25 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-import 'mapbox-gl/dist/mapbox-gl.css';
-import mapboxgl from '!mapbox-gl';
-import {useEffect, useRef, useState} from "react"; // eslint-disable-line import/no-webpack-loader-syntax
+import ReactMapboxGl from "react-mapbox-gl";
+import DrawControl from "react-mapbox-gl-draw";
+import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiZnJvemllcyIsImEiOiJja3BrYWtqMHAwcWxwMndvZzJ3dTA0Mmx5In0.9hVe317rhGrT2ynl-1-bGQ';
-
+const Map = ReactMapboxGl({
+    accessToken:
+        "pk.eyJ1IjoiZmFrZXVzZXJnaXRodWIiLCJhIjoiY2pwOGlneGI4MDNnaDN1c2J0eW5zb2ZiNyJ9.mALv0tCpbYUPtzT7YysA2g"
+});
 
 
 export default function Home() {
 
-    const mapContainer = useRef(null);
-    const map = useRef(null);
-    const [lng, setLng] = useState(-70.9);
-    const [lat, setLat] = useState(42.35);
-    const [zoom, setZoom] = useState(9);
+    const onDrawCreate = ({ features }) => {
+        console.log(features);
+    };
 
-    useEffect(() => {
-        if (map.current) return; // initialize map only once
-        map.current = new mapboxgl.Map({
-            container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [lng, lat],
-            zoom: zoom
-        });
-    });
+    const onDrawUpdate = ({ features }) => {
+        console.log(features);
+    };
 
   return (
     <div className={styles.container}>
@@ -40,7 +34,17 @@ export default function Home() {
           Welcome to <a href="http://saferobotic.com/">SafeRobotic</a>
         </h1>
           <h2> Map Demo!</h2>
-          <div ref={mapContainer} className="map-container" />
+
+          <Map
+              style="mapbox://styles/mapbox/streets-v9" // eslint-disable-line
+              containerStyle={{
+                  height: "600px",
+                  width: "100vw"
+              }}
+          >
+              <DrawControl onDrawCreate={onDrawCreate} onDrawUpdate={onDrawUpdate}  />
+          </Map>
+
       </main>
     </div>
   )
