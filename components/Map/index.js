@@ -8,9 +8,9 @@ mapboxgl.accessToken =
 const Map = () => {
     const mapContainerRef = useRef(null);
 
-    const [lng, setLng] = useState(5); /*TODO: Set to current users location*/
-    const [lat, setLat] = useState(34);/*TODO: Set to current users location*/
-    const [zoom, setZoom] = useState(1.5);/*TODO: Set to current users location*/
+    const [lng, setLng] = useState(-81.8); /*TODO: Set to current users location*/
+    const [lat, setLat] = useState(26.5);/*TODO: Set to current users location*/
+    const [zoom, setZoom] = useState(10);/*TODO: Set to current users location*/
 
     const Draw = new MapboxDraw();
 
