@@ -4,9 +4,9 @@ import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import turf from "turf";
 
 mapboxgl.accessToken =
-    'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
+    'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA'; //TODO: Enviornmental Variables
 
-const Map = () => {
+const Map = () => { //TODO: Documentation Documentation Documentation
     const mapContainerRef = useRef(null);
 
     const [lng, setLng] = useState(-81.8); /*TODO: Set to current users location*/
@@ -40,7 +40,7 @@ const Map = () => {
         map.on('draw.delete', updateArea);
         map.on('draw.update', updateArea);
 
-        function updateArea(e) {
+        function updateArea() { //TODO: Change to arrow function
             const data = Draw.getAll();
             if (data.features.length > 0) {
                 let area = turf.area(data);
