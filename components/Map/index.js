@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
+import turf from "turf";
 
 mapboxgl.accessToken =
     'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
@@ -11,6 +12,8 @@ const Map = () => {
     const [lng, setLng] = useState(-81.8); /*TODO: Set to current users location*/
     const [lat, setLat] = useState(26.5);/*TODO: Set to current users location*/
     const [zoom, setZoom] = useState(10);/*TODO: Set to current users location*/
+
+    const [area, setArea] = useState(0);
 
     const Draw = new MapboxDraw();
 
@@ -33,6 +36,21 @@ const Map = () => {
             setZoom(map.getZoom().toFixed(2));
         });
 
+        map.on('draw.create', updateArea);
+        map.on('draw.delete', updateArea);
+        map.on('draw.update', updateArea);
+
+        function updateArea(e) {
+            const data = Draw.getAll();
+            if (data.features.length > 0) {
+                let area = turf.area(data);
+                // restrict to area to 2 decimal points
+                setArea(Math.round(area * 100) / 100);
+            } else {
+                setArea(0)
+            }
+        }
+
         // Clean up on unmount
         return () => map.remove();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -49,7 +67,7 @@ const Map = () => {
 
             <div className='sidebarStyle'>
                 <div>
-                    Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+                    Longitude: {lng} | Latitude: {lat} | Zoom: {zoom} | Area: {area}m²
                 </div>
             </div>
             <div className='map-container' ref={mapContainerRef} />
