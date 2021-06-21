@@ -3,8 +3,9 @@ import mapboxgl from 'mapbox-gl';
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import turf from "turf";
 
-mapboxgl.accessToken =
-    'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA'; //TODO: Enviornmental Variables
+require('dotenv').config();
+
+mapboxgl.accessToken = process.env.MAPBOXGL_ACCESSTOKEN;
 
 const Map = () => { //TODO: Documentation Documentation Documentation
     const mapContainerRef = useRef(null);

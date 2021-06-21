@@ -37,3 +37,4 @@ yarn-error.log*
 /.idea/modules.xml
 /.idea/.gitignore
 /package-lock.json
+/.env
