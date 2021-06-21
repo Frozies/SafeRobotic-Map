@@ -2,21 +2,33 @@ import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import turf from "turf";
+import useCurrentLocation from "../hooks/useCurrentLocation";
+import useWatchLocation from "../hooks/useWatchLocation";
+import Location from "./Location";
 
 require('dotenv').config();
 
 mapboxgl.accessToken = process.env.MAPBOXGL_ACCESSTOKEN;
 
 const Map = () => { //TODO: Documentation Documentation Documentation
+    // initializing the map container as a reference.
     const mapContainerRef = useRef(null);
 
+    // Latitude and longitude and zoom states for the map itself
     const [lng, setLng] = useState(-81.8); /*TODO: Set to current users location*/
     const [lat, setLat] = useState(26.5);/*TODO: Set to current users location*/
     const [zoom, setZoom] = useState(10);/*TODO: Set to current users location*/
 
+    // Add area to a state that defaults to zero
     const [area, setArea] = useState(0);
 
+    // Create a mapbox drawing component
     const Draw = new MapboxDraw();
+
+    //Location access
+    const { location: currentLocation, error: currentError } = useCurrentLocation(geolocationOptions);
+    const { location, cancelLocationWatch, error } = useWatchLocation(geolocationOptions);
+    const [isWatchinForLocation, setIsWatchForLocation] = useState(true);
 
     // Initialize map when component mounts
     useEffect(() => {
@@ -56,6 +68,16 @@ const Map = () => { //TODO: Documentation Documentation Documentation
         return () => map.remove();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    useEffect(() => {
+        if (!location) return;
+
+        // Cancel location watch after 3sec
+        setTimeout(() => {
+            cancelLocationWatch();
+            setIsWatchForLocation(false);
+        }, 3000);
+    }, [location, cancelLocationWatch]);
+
     return (
         <div>
 
@@ -70,6 +92,12 @@ const Map = () => { //TODO: Documentation Documentation Documentation
                 <div>
                     Longitude: {lng} | Latitude: {lat} | Zoom: {zoom} | Area: {area}m²
                 </div>
+
+                <p>Current position:</p>
+                <Location location={currentLocation} error={currentError} />
+
+                <p>Watch position: (Status: {isWatchinForLocation.toString()})</p>
+                <Location location={location} error={error} />
             </div>
             <div className='map-container' ref={mapContainerRef} />
         </div>
