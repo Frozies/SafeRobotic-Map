@@ -14,9 +14,9 @@ const Map = () => { //TODO: Documentation Documentation Documentation
     const mapContainerRef = useRef(null);
 
     // Latitude and longitude and zoom states for the map itself
-    const [lng, setLng] = useState(-81.8); /*TODO: Set to current users location*/
-    const [lat, setLat] = useState(26.5);/*TODO: Set to current users location*/
-    const [zoom, setZoom] = useState(10);/*TODO: Set to current users location*/
+    const [lng, setLng] = useState(-81.8);
+    const [lat, setLat] = useState(26.5);
+    const [zoom, setZoom] = useState(10);
 
     // Add area to a state that defaults to zero
     const [area, setArea] = useState(0);
@@ -31,6 +31,21 @@ const Map = () => { //TODO: Documentation Documentation Documentation
 
     // Initialize map when component mounts
     useEffect(() => {
+        if (!location) return;
+
+
+        setTimeout(() => {
+            if (location) {
+                setLng(location.longitude);
+                setLat(location.latitude);
+                setZoom(13);
+            }
+
+            // Cancel location watch after 3sec
+            cancelLocationWatch();
+            setIsWatchForLocation(false);
+        }, 3000);
+
         const map = new mapboxgl.Map({
             container: mapContainerRef.current,
             style: 'mapbox://styles/mapbox/streets-v11',
@@ -65,22 +80,8 @@ const Map = () => { //TODO: Documentation Documentation Documentation
 
         // Clean up on unmount
         return () => map.remove();
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [location, cancelLocationWatch]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    useEffect(() => {
-        if (!location) return;
-
-        else if (location) {
-            setLng(location.longitude);
-            setLat(location.latitude);
-        }
-
-        // Cancel location watch after 3sec
-        setTimeout(() => {
-            cancelLocationWatch();
-            setIsWatchForLocation(false);
-        }, 3000);
-    }, [location, cancelLocationWatch]);
 
     return (
         <div>
