@@ -34,17 +34,12 @@ const Map = () => { //TODO: Documentation Documentation Documentation
         if (!location) return;
 
         setTimeout(() => {
-            if (location) {
-                setLng(location.longitude);
-                setLat(location.latitude);
-                setZoom(15);
-            }
-
             // Cancel location watch after 3sec
             cancelLocationWatch();
             setIsWatchForLocation(false);
         }, 3000);
     }, [location, cancelLocationWatch]);
+
 
     // Initialize map when component mounts
     useEffect(() => {
@@ -68,6 +63,7 @@ const Map = () => { //TODO: Documentation Documentation Documentation
         map.on('draw.create', updateArea);
         map.on('draw.delete', updateArea);
         map.on('draw.update', updateArea);
+        map.on('load', setUserLocation);
 
         function updateArea() { //TODO: Change to arrow function
             const data = Draw.getAll();
@@ -80,9 +76,19 @@ const Map = () => { //TODO: Documentation Documentation Documentation
             }
         }
 
+        function setUserLocation() {
+            setTimeout(() => {
+                if (location) {
+                    setLng(location.longitude);
+                    setLat(location.latitude);
+                    setZoom(15);
+                }
+            }, 250); // i need to do more testing to see if this timeout function is needed...
+        }
+
         // Clean up on unmount
         return () => map.remove();
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [location]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div>
