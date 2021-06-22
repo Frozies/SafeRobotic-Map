@@ -43,11 +43,21 @@ const Map = () => { //TODO: Documentation Documentation Documentation
 
     // Initialize map when component mounts
     useEffect(() => {
+        let mapLng = lng;
+        let mapLat = lat;
+        let mapZoom = zoom
+
+        if(location){
+            mapLng = location.longitude;
+            mapLat = location.latitude;
+            mapZoom = 13 //TODO: Maybe add a linear interp for a smooth animation
+        }
+
         const map = new mapboxgl.Map({
             container: mapContainerRef.current,
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [lng, lat],
-            zoom: zoom
+            style: 'mapbox://styles/mapbox/streets-v11', //Todo: Dynamic styling
+            center: [mapLng, mapLat],
+            zoom: mapZoom
         });
 
         // Add navigation control (the +/- zoom buttons)
@@ -60,10 +70,10 @@ const Map = () => { //TODO: Documentation Documentation Documentation
             setZoom(map.getZoom().toFixed(2));
         });
 
+        // map.on('load', setUserLocation);
         map.on('draw.create', updateArea);
         map.on('draw.delete', updateArea);
         map.on('draw.update', updateArea);
-        map.on('load', setUserLocation);
 
         function updateArea() { //TODO: Change to arrow function
             const data = Draw.getAll();
@@ -76,7 +86,8 @@ const Map = () => { //TODO: Documentation Documentation Documentation
             }
         }
 
-        function setUserLocation() {
+        //This is a bad hack job
+/*        function setUserLocation() {
             setTimeout(() => {
                 if (location) {
                     setLng(location.longitude);
@@ -84,7 +95,7 @@ const Map = () => { //TODO: Documentation Documentation Documentation
                     setZoom(15);
                 }
             }, 250); // i need to do more testing to see if this timeout function is needed...
-        }
+        }*/
 
         // Clean up on unmount
         return () => map.remove();
