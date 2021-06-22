@@ -5,10 +5,9 @@ import turf from "turf";
 import useCurrentLocation from "../hooks/useCurrentLocation";
 import useWatchLocation from "../hooks/useWatchLocation";
 import Location from "./Location";
+import {geolocationOptions} from "../constants/geolocationOptions";
 
-require('dotenv').config();
-
-mapboxgl.accessToken = process.env.MAPBOXGL_ACCESSTOKEN;
+mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 
 const Map = () => { //TODO: Documentation Documentation Documentation
     // initializing the map container as a reference.
@@ -70,6 +69,11 @@ const Map = () => { //TODO: Documentation Documentation Documentation
 
     useEffect(() => {
         if (!location) return;
+
+        else if (location) {
+            setLng(location.longitude);
+            setLat(location.latitude);
+        }
 
         // Cancel location watch after 3sec
         setTimeout(() => {
