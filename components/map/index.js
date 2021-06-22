@@ -29,23 +29,25 @@ const Map = () => { //TODO: Documentation Documentation Documentation
     const { location, cancelLocationWatch, error } = useWatchLocation(geolocationOptions);
     const [isWatchinForLocation, setIsWatchForLocation] = useState(true);
 
-    // Initialize map when component mounts
+    // Retrieve the devices location
     useEffect(() => {
         if (!location) return;
-
 
         setTimeout(() => {
             if (location) {
                 setLng(location.longitude);
                 setLat(location.latitude);
-                setZoom(13);
+                setZoom(15);
             }
 
             // Cancel location watch after 3sec
             cancelLocationWatch();
             setIsWatchForLocation(false);
         }, 3000);
+    }, [location, cancelLocationWatch]);
 
+    // Initialize map when component mounts
+    useEffect(() => {
         const map = new mapboxgl.Map({
             container: mapContainerRef.current,
             style: 'mapbox://styles/mapbox/streets-v11',
@@ -80,8 +82,7 @@ const Map = () => { //TODO: Documentation Documentation Documentation
 
         // Clean up on unmount
         return () => map.remove();
-    }, [location, cancelLocationWatch]); // eslint-disable-line react-hooks/exhaustive-deps
-
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div>
