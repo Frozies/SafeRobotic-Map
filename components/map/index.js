@@ -51,6 +51,10 @@ const Map = () => { //TODO: Documentation Documentation Documentation
             mapLng = location.longitude;
             mapLat = location.latitude;
             mapZoom = 13 //TODO: Maybe add a linear interp for a smooth animation
+
+            setLng(mapLng.toFixed(4));
+            setLat(mapLat.toFixed(4));
+            setZoom(mapZoom.toFixed(2));
         }
 
         const map = new mapboxgl.Map({
@@ -86,16 +90,11 @@ const Map = () => { //TODO: Documentation Documentation Documentation
             }
         }
 
-        //This is a bad hack job
-/*        function setUserLocation() {
-            setTimeout(() => {
-                if (location) {
-                    setLng(location.longitude);
-                    setLat(location.latitude);
-                    setZoom(15);
-                }
-            }, 250); // i need to do more testing to see if this timeout function is needed...
-        }*/
+        function updateCurrentLocation(map) {
+            setLng(map.getCenter().lng.toFixed(4));
+            setLat(map.getCenter().lat.toFixed(4));
+            setZoom(map.getZoom().toFixed(2));
+        }
 
         // Clean up on unmount
         return () => map.remove();
@@ -115,12 +114,6 @@ const Map = () => { //TODO: Documentation Documentation Documentation
                 <div>
                     Longitude: {lng} | Latitude: {lat} | Zoom: {zoom} | Area: {area}m²
                 </div>
-
-                <p>Current position:</p>
-                <Location location={currentLocation} error={currentError} />
-
-                <p>Watch position: (Status: {isWatchinForLocation.toString()})</p>
-                <Location location={location} error={error} />
             </div>
             <div className='map-container' ref={mapContainerRef} />
         </div>
