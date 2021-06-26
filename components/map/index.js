@@ -9,7 +9,7 @@ import {geolocationOptions} from "../constants/geolocationOptions";
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZnJvemllcyIsImEiOiJja3BrYWtqMHAwcWxwMndvZzJ3dTA0Mmx5In0.9hVe317rhGrT2ynl-1-bGQ';
 
-const Map = () => { //TODO: Documentation Documentation Documentation
+const Map = () => {
     // initializing the map container as a reference.
     const mapContainerRef = useRef(null);
 
