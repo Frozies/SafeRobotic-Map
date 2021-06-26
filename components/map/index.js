@@ -7,7 +7,7 @@ import useWatchLocation from "../hooks/useWatchLocation";
 import Location from "./Location";
 import {geolocationOptions} from "../constants/geolocationOptions";
 
-mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
+mapboxgl.accessToken = 'pk.eyJ1IjoiZnJvemllcyIsImEiOiJja3BrYWtqMHAwcWxwMndvZzJ3dTA0Mmx5In0.9hVe317rhGrT2ynl-1-bGQ';
 
 const Map = () => { //TODO: Documentation Documentation Documentation
     // initializing the map container as a reference.
@@ -45,7 +45,7 @@ const Map = () => { //TODO: Documentation Documentation Documentation
     useEffect(() => {
         const map = new mapboxgl.Map({
             container: mapContainerRef.current,
-            style: 'mapbox://styles/mapbox/streets-v11',
+            style: 'mapbox://styles/frozies/ckpkaor1i10sl18p9bo2qkg49',
             center: [lng, lat],
             zoom: zoom
         });
