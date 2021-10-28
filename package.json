@@ -18,6 +18,7 @@
     "react-map-gl": "^6.1.16",
     "react-map-gl-draw": "^0.22.3",
     "react-map-gl-geocoder": "^2.1.6",
+    "react-scripts": "^4.0.3",
     "turf": "^3.0.14"
   },
   "browserslist": [

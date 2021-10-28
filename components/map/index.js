@@ -9,12 +9,12 @@ import useCurrentLocation from "../hooks/useCurrentLocation";
 import {geolocationOptions} from "../constants/geolocationOptions";
 import useWatchLocation from "../hooks/useWatchLocation";
 
-// Ways to set Mapbox token: https://uber.github.io/react-map-gl/#/Documentation/getting-started/about-mapbox-tokens
-const MAPBOX_TOKEN = 'pk.eyJ1IjoiZnJvemllcyIsImEiOiJja3BrYWtqMHAwcWxwMndvZzJ3dTA0Mmx5In0.9hVe317rhGrT2ynl-1-bGQ'
+const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOXGL_ACCESSTOKEN
 
 const Map = () => {
     const mapRef = useRef();
 
+    // Set a default viewport
     const [viewport, setViewport] = useState({
         latitude: 37.7577,
         longitude: -122.4376,
@@ -37,15 +37,15 @@ const Map = () => {
 
     const [style, setStyle] = useState(STYLES[0].url)
 
-    //Location access
+    //Location access for zoom function
     const { location: currentLocation, error: currentError } = useCurrentLocation(geolocationOptions);
     const { location, cancelLocationWatch, error } = useWatchLocation(geolocationOptions);
     const [isWatchinForLocation, setIsWatchForLocation] = useState(true);
 
+    //Zoom to users current location
     useEffect(() => {
         setTimeout(() => {
             goToUser();
-            console.log("went")
         }, 3000);
     },[location])
 
@@ -87,7 +87,7 @@ const Map = () => {
                 zoom: 13,
                 transitionDuration: 3000,
                 transitionInterpolator: new FlyToInterpolator(),
-                // transitionEasing: d3.easeCubic
+                // transitionEasing: d3.easeCubic //Make the zoom a little smoother
             })
         }
     }
@@ -125,26 +125,33 @@ const Map = () => {
                     }}/>
                 </Source>
             </MapGL>
+
+            {/*Edit Feature*/}
             <button onClick={()=> {
                 setMode(new MODES[2].handler)
             }}>Set Mode {MODES[2].text}</button>
 
+            {/*Draw Polyline*/}
             <button onClick={()=> {
                 setMode(new MODES[0].handler)
             }}>Set Mode {MODES[0].text}</button>
 
+            {/*Draw Polygon*/}
             <button onClick={()=> {
                 setMode(new MODES[1].handler)
             }}>Set Mode {MODES[1].text}</button>
 
+            {/*Set Style Streets*/}
             <button onClick={()=> {
                 setStyle(STYLES[0].url)
             }}>Set Style {STYLES[0].title}</button>
 
+            {/*Set Style Satellite*/}
             <button onClick={()=> {
                 setStyle(STYLES[1].url)
             }}>Set Style {STYLES[1].title}</button>
 
+            {/*Set Style Navigation Night*/}
             <button onClick={()=> {
                 setStyle(STYLES[2].url)
             }}>Set Style {STYLES[2].title}</button>
